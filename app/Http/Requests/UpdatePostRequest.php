@@ -28,7 +28,7 @@ class UpdatePostRequest extends FormRequest
             'keywords' => 'nullable',
             'text' => 'required:min:10',
             'cover' => 'nullable|mimes:png,jpeg,gif'
-            // если все форматы картинок то
+            // если все форматы изображений то
             //'cover' => 'nullable|image'
         ];
     }
