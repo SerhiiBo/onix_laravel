@@ -11,10 +11,10 @@ class UpdatePostRequest extends FormRequest
      *
      * @return bool
      */
-//    public function authorize()
-//    {
-//        return false;
-//    }
+   public function authorize()
+   {
+       return true;
+   }
 
     /**
      * Get the validation rules that apply to the request.
@@ -40,7 +40,7 @@ class UpdatePostRequest extends FormRequest
     public function messages()
     {
         return [
-            'title.required' => 'Поле title должно быть заполнено',
+            'title.required' => 'Поле должно быть заполнено',
             'title.min' => 'Минимальная длинна заголовка - 5 символов',
             'title.max' => 'Максимальная длинна заголовка - 150 символов',
             'text.required' => 'Поле text должно быть заполнено',

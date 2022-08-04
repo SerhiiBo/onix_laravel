@@ -27,6 +27,7 @@ class PostController extends Controller
     public function store(UpdatePostRequest $request)
     {
         $validated = $request->validated();
+        dd($request->validated());
         return $validated->all();
     }
 
@@ -51,6 +52,7 @@ class PostController extends Controller
     public function update(UpdatePostRequest $request, Post $post)
     {
         $post->update($request->validated());
+        dd($request->validated());
         return $post;
     }
 
