@@ -26,10 +26,27 @@ class UpdatePostRequest extends FormRequest
         return [
             'title' => 'required|min:5|max:150',
             'keywords' => 'nullable',
-            'text' => 'required:min:10',
+            'text' => 'required|min:10',
             'cover' => 'nullable|mimes:png,jpeg,gif'
             // если все форматы изображений то
             //'cover' => 'nullable|image'
         ];
     }
+        /**
+     * Сообщения об ошибках для определенных правил проверки.
+     *
+     * @return array
+     */
+    public function messages()
+    {
+        return [
+            'title.required' => 'Поле title должно быть заполнено',
+            'title.min' => 'Минимальная длинна заголовка - 5 символов',
+            'title.max' => 'Максимальная длинна заголовка - 150 символов',
+            'text.required' => 'Поле text должно быть заполнено',
+            'text.min' => 'Минимальная длинна поля text - 10 символов',
+            'cover.required' => 'Допустимый формат изображений: png, jpeg, gif',
+        ];
+    }
+
 }
