@@ -1,25 +1,36 @@
-<!doctype html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Users</title>
-    <link rel="stylesheet" href="https://unpkg.com/tachyons@4.10.0/css/tachyons.min.css"/>
-</head>
+@extends("webpost")
 
-<body>
-<div class="mw6 center pa3 sans-serif">
-    <h1 class="mb4">Posts</h1>
-
-        <div class="pa2 mb3 striped--near-white">
-            <header class="b mb2">{{ $post->title }}</header>
-            <div class="pl2">
-                <p class="mb2">id: {{ $post->id }}</p>
-                <p class="mb2">details: {{ $post->text }}</p>
-                <p class="mb2">Date: {{ $post->date }}</p>
+@section('content')
+    <section class="py-5 text-center container">
+        <div class="row py-lg-5">
+            <div class="col-lg-6 col-md-8 mx-auto">
+                <h1 class="fw-light">
+                    <b>{{ $post->title }}</b>
+                </h1>
+                <p class="mb2">
+                    <b>Id № </b>: {{ $post->id }}
+                </p>
+                <p class="mb2">
+                    <b>Text: </b> {{ $post->text }}
+                </p>
+                <p class="mb2">
+                    <b>Date: </b>{{ $post->date }}
+                </p>
             </div>
+            @if(auth()->user())
+                @if(auth()->user()->id == $post->user_id)
+                    <p>
+                        <a href="{{route('postEdit', $post->id)}}">
+                            <button type="submit" class="btn btn-primary">Редактировать</button>
+                        </a>
+                    </p>
+                    <p>
+                        <a href="{{route('postDelete', $post->id)}}">
+                            <button type="submit" class="btn btn-danger">Удалить</button>
+                        </a>
+                    </p>
+                @endif
+            @endif
         </div>
-
-</div>
-</body>
-</html>
+    </section>
+@endsection

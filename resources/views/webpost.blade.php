@@ -9,9 +9,10 @@
 </head>
 
 <body>
-@include('posts.incl.header')
+   @include('posts.inc.header')
 
-@yield('content')
+   @include('posts.inc.messages')
 
+   @yield('content')
 </body>
 </html>
