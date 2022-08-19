@@ -23,21 +23,28 @@ class UserController extends Controller
         } elseif ($request->query('keywords')) {
             return $this->findByEmail($request);
         } elseif ($request->query('startDate') && $request->query('endDate')) {
-            return $this->findByCreatedDate($request);
-        }
+            return $this->findByCreatedAt($request);
+        } else return 'Wrong query';
     }
 
     public function findByEmail(Request $request)
     {
         $search_email = $request->query('keywords')."%";
-        return UserResource::collection(User::where('email','like', $search_email)->get());
+        $user = User::where('email','ilike', $search_email)
+            ->paginate(1)
+            ->withQueryString();
+        return UserResource::collection($user);
     }
 
-    public function findByCreatedDate(Request $request)
+    public function findByCreatedAt(Request $request)
     {
         $startDate = $request->query('startDate');
         $endDate = $request->query('endDate');
-        return UserResource::collection(User::whereBetween('created_at',[ $startDate, $endDate ])->get());
+        $userByCreatedDate = User::whereBetween('created_at',[ $startDate, $endDate ])
+            ->paginate(1)
+            ->withQueryString();
+
+        return UserResource::collection($userByCreatedDate);
     }
 
 
@@ -50,6 +57,7 @@ class UserController extends Controller
     public function store(UpdateUserRequest $request): UserResource
     {
         $created_user = User::create($request->validated());
+
         return new UserResource($created_user);
     }
 
@@ -74,6 +82,7 @@ class UserController extends Controller
     public function update(UpdateUserRequest $request,User $user)
     {
         $user->update($request->validated());
+
         return new UserResource($user);
     }
 

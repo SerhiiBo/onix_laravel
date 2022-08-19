@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UpdatePostRequest;
 use App\Http\Resources\PostResource;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Models\Posts;
 
@@ -14,11 +15,26 @@ class PostController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
-    public function index()
+    public function index(Request $request)
     {
-        return Posts::all('title', 'text','date');
+        if (!$request->query()) {
+            return Posts::all('title', 'text', 'date');
+        } elseif ($request->query('keywords')) {
+            return $this->findByKeywords($request);
+        }  else return 'Wrong query';
+    }
+
+    public function findByKeywords(Request $request)
+    {
+        $search_words = "%".$request->query('keywords')."%";
+        $post = Posts::where('title','ilike', $search_words)
+            ->orWhere('text','ilike', $search_words)
+            ->paginate(5)
+            ->withQueryString();
+
+        return PostResource::collection($post);
     }
 
     /**
@@ -30,6 +46,7 @@ class PostController extends Controller
     public function store(UpdatePostRequest $request)
     {
         $created_post = Posts::create($request->validated());
+
         return new PostResource( $created_post);
     }
 
@@ -54,6 +71,7 @@ class PostController extends Controller
     public function update(UpdatePostRequest $request, Posts $post)
     {
         $post->update($request->validated());
+
         return $post;
     }
 
@@ -66,6 +84,7 @@ class PostController extends Controller
     public function destroy(Posts $post)
     {
        $post->delete();
+
        return response(null,Response::HTTP_NO_CONTENT);
     }
 }
