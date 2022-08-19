@@ -18,33 +18,36 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
+
+
         if (!$request->query()) {
             return UserResource::collection(User::all());
-        } elseif ($request->query('keywords')) {
+        } elseif ($request->keywords) {
             return $this->findByEmail($request);
-        } elseif ($request->query('startDate') && $request->query('endDate')) {
+        } elseif ($request->startDate && $request->endDate) {
             return $this->findByCreatedAt($request);
         } else return 'Wrong query';
     }
 
     public function findByEmail(Request $request)
     {
-        $search_email = $request->query('keywords')."%";
+        $search_email = $request->keywords."%";
         $user = User::where('email','ilike', $search_email)
             ->paginate(1)
             ->withQueryString();
+
         return UserResource::collection($user);
     }
 
     public function findByCreatedAt(Request $request)
     {
-        $startDate = $request->query('startDate');
-        $endDate = $request->query('endDate');
-        $userByCreatedDate = User::whereBetween('created_at',[ $startDate, $endDate ])
+        $startDate = $request->startDate;
+        $endDate = $request->endDate;
+        $user = User::whereBetween('created_at',[ $startDate, $endDate ])
             ->paginate(1)
             ->withQueryString();
 
-        return UserResource::collection($userByCreatedDate);
+        return UserResource::collection($user);
     }
 
 

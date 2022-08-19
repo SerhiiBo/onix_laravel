@@ -21,14 +21,14 @@ class PostController extends Controller
     {
         if (!$request->query()) {
             return Posts::all('title', 'text', 'date');
-        } elseif ($request->query('keywords')) {
+        } elseif ($request->keywords) {
             return $this->findByKeywords($request);
         }  else return 'Wrong query';
     }
 
     public function findByKeywords(Request $request)
     {
-        $search_words = "%".$request->query('keywords')."%";
+        $search_words = "%".$request->keywords."%";
         $post = Posts::where('title','ilike', $search_words)
             ->orWhere('text','ilike', $search_words)
             ->paginate(5)
