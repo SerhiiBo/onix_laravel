@@ -15,26 +15,18 @@ class PostController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
     public function index(Request $request)
     {
-        if (!$request->query()) {
-            return Posts::all('title', 'text', 'date');
-        } elseif ($request->keywords) {
-            return $this->findByKeywords($request);
-        }  else return 'Wrong query';
-    }
-
-    public function findByKeywords(Request $request)
-    {
-        $search_words = "%".$request->keywords."%";
-        $post = Posts::where('title','ilike', $search_words)
-            ->orWhere('text','ilike', $search_words)
-            ->paginate(5)
-            ->withQueryString();
-
-        return PostResource::collection($post);
+        $query = Posts::query();
+        if ($request->keywords) {
+            $search_words = "%".$request->keywords."%";
+            $query->where('title','ilike', $search_words)
+                ->orWhere('text','ilike', $search_words);
+        }
+        $posts = $query->paginate(5)->withQueryString();
+        return $posts;
     }
 
     /**

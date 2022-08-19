@@ -8,6 +8,7 @@ use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Http\Resources\Json\JsonResource;
 
 class UserController extends Controller
 {
@@ -18,38 +19,18 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-
-
-        if (!$request->query()) {
-            return UserResource::collection(User::all());
-        } elseif ($request->keywords) {
-            return $this->findByEmail($request);
-        } elseif ($request->startDate && $request->endDate) {
-            return $this->findByCreatedAt($request);
-        } else return 'Wrong query';
+        $query=User::query();
+        if ($request->keywords) {
+            $query->where('email','ILIKE',$request->keywords."%");
+        }
+        if ($request->startDate AND $request->endDate) {
+            $startDate = $request->startDate;
+            $endDate = $request->endDate;
+            $query->whereBetween('created_at',[ $startDate, $endDate ]);
+        }
+        $users=$query->paginate(5)->withQueryString();
+        return UserResource::collection($users);
     }
-
-    public function findByEmail(Request $request)
-    {
-        $search_email = $request->keywords."%";
-        $user = User::where('email','ilike', $search_email)
-            ->paginate(1)
-            ->withQueryString();
-
-        return UserResource::collection($user);
-    }
-
-    public function findByCreatedAt(Request $request)
-    {
-        $startDate = $request->startDate;
-        $endDate = $request->endDate;
-        $user = User::whereBetween('created_at',[ $startDate, $endDate ])
-            ->paginate(1)
-            ->withQueryString();
-
-        return UserResource::collection($user);
-    }
-
 
     /**
      * Store a newly created resource in storage.
