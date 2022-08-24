@@ -11,10 +11,10 @@ class UpdatePostRequest extends FormRequest
      *
      * @return bool
      */
-   public function authorize()
-   {
-       return true;
-   }
+    public function authorize()
+    {
+        return true;
+    }
 
     /**
      * Get the validation rules that apply to the request.
@@ -27,12 +27,12 @@ class UpdatePostRequest extends FormRequest
             'title' => 'required|min:5|max:150',
             'keywords' => 'nullable',
             'text' => 'required|min:10',
-            'cover' => 'nullable|mimes:png,jpeg,gif'
-            // если все форматы изображений то
-            //'cover' => 'nullable|image'
+            'cover' => 'nullable|mimes:png,jpeg,gif',
+            'tags' => 'nullable',
         ];
     }
-        /**
+
+    /**
      * Сообщения об ошибках для определенных правил проверки.
      *
      * @return array

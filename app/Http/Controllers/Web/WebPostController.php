@@ -5,58 +5,56 @@ namespace App\Http\Controllers\Web;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests\UpdatePostRequest;
-use App\Models\Posts;
+use App\Models\Post;
 
 class WebPostController extends Controller
 {
     public function showAll()
     {
-        $posts = Posts::orderby('date','DESC');
-        return view('posts/all-posts',['posts' => $posts->paginate(6)]);
+        $posts = Post::orderBy('date', 'DESC');
+        return view('posts/all', ['posts' => $posts->paginate(6)]);
     }
 
-    public function showOne($id)
+    public function showOne(Post $post)
     {
-        return view('posts/show-one-post', ['post' => Posts::find($id)]);
+        return view('posts/show', ['post' => $post]);
     }
 
-    public function editPost($id)
+    public function edit(Post $post)
     {
-
-        return view('posts/edit-post', ['post' => Posts::find($id)]);
+        return view('posts/edit', ['post' => $post]);
     }
 
-    public function editPostSubmit($id, UpdatePostRequest $request)
+    public function editSubmit($id, UpdatePostRequest $request)
     {
-        $post = Posts::find($id);
+        $post = Post::find($id);
         $post->title = $request->input('title');
         $post->text = $request->input('text');
         $post->date = date("d.m.Y");
         $post->save();
-
-        return redirect()->route('showOnePost', $post->id)->with('success','Сообщение изменено');
+        return redirect()->route('showOne', $post->id)->with('success', 'Сообщение изменено');
     }
 
 
-    public function createPost()
+    public function create()
     {
-        return view('posts/addNew-post');
+        return view('posts/create');
     }
 
-    public function createPostSubmit(UpdatePostRequest $request)
+    public function createSubmit(UpdatePostRequest $request)
     {
-        $post = new Posts();
+        $post = new Post();
         $post->title = $request->input('title');
         $post->text = $request->input('text');
         $post->date = date("d.m.Y");
         $post->user_id = auth()->user()->id;
         $post->save();
-
-        return redirect()->route('showAllPosts')->with('success','Сообщение добавлено');
+        return redirect()->route('showAll')->with('success', 'Сообщение добавлено');
     }
 
-     public function deletePost($id) {
-        Posts::find($id)->delete();
-        return redirect()->route('showAllPosts')->with('success','Сообщение удалено');
-     }
+    public function delete($id)
+    {
+        Post::find($id)->delete();
+        return redirect()->route('showAll')->with('success', 'Сообщение удалено');
+    }
 }

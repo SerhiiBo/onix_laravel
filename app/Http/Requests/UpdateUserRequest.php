@@ -28,16 +28,15 @@ class UpdateUserRequest extends FormRequest
         return [
             'name' => 'required',
             'email' => 'required|email|unique:users,email',
-            'password' => ['nullable','confirmed', Password::min(6)->mixedCase()->numbers()->uncompromised()],
-            'password_confirmation' => 'required_with:password'
+            'password' => ['nullable', 'confirmed', Password::min(6)->mixedCase()->numbers()->uncompromised()],
         ];
     }
 
     /**
- * Сообщения об ошибках для определенных правил проверки.
- *
- * @return array
- */
+     * Сообщения об ошибках для определенных правил проверки.
+     *
+     * @return array
+     */
     public function messages()
     {
         return [

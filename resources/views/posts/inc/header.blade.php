@@ -8,10 +8,10 @@
             </a>
             <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
                 <li>
-                    <a href="{{ route('showAllPosts') }}" class="nav-link px-2 text-secondary">All Posts</a>
+                    <a href="{{ route('showAll') }}" class="nav-link px-2 text-secondary">All Posts</a>
                 </li>
                 <li>
-                    <a href="{{ route('createPostForm') }}" class="nav-link px-2 text-white">Add Post</a>
+                    <a href="{{ route('create_post') }}" class="nav-link px-2 text-white">Add Post</a>
                 </li>
                 <li>
                     <a href="{{ route('showAllUsers') }}" class="nav-link px-2 text-white">List of users</a>

@@ -1,4 +1,4 @@
-@extends("webpost")
+@extends('layouts.app')
 
 @section('content')
     <section class="py-5 text-center container">
@@ -20,14 +20,14 @@
             @if(auth()->user())
                 @if(auth()->user()->id == $post->user_id)
                     <p>
-                        <a href="{{route('postEdit', $post->id)}}">
+                        <a href="{{route('edit_post', $post->id)}}">
                             <button type="submit" class="btn btn-primary">Редактировать</button>
                         </a>
                     </p>
                     <p>
-                        <a href="{{route('postDelete', $post->id)}}">
+                        <form action="{{route('delete', $post->id)}}" method="delete">
                             <button type="submit" class="btn btn-danger">Удалить</button>
-                        </a>
+                        </form>
                     </p>
                 @endif
             @endif

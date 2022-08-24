@@ -10,7 +10,7 @@ class UserResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return array|\Illuminate\Contracts\Support\Arrayable|\JsonSerializable
      */
     public function toArray($request)
@@ -20,7 +20,7 @@ class UserResource extends JsonResource
             'name' => $this->name,
             'email' => $this->email,
             'created_at' => $this->created_at,
-            'posts_amount' => count(PostResource::collection($this->postList)),
+            'posts_amount' => count($this->posts),
         ];
     }
 }

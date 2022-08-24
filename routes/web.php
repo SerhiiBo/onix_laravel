@@ -1,7 +1,9 @@
 <?php
 
+use App\Models\Post;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Web\WebPostController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -25,25 +27,27 @@ Route::get('/profile', function () {
     return view('profile');
 })->middleware('auth');
 
+//Route::get('/post/{post}', function (Post $post) {
+//    return dd($post->title);
+//});
 
-Route::get('/webposts', [WebPostController::class, 'showAll'])->name('showAllPosts');
+Route::get('/posts', [WebPostController::class, 'showAll'])->name('showAll');
 
-Route::get('/webposts/addNew', [WebPostController::class, 'createPost'])->middleware(['auth'])->name('createPostForm');;
-Route::get('/webposts/{id}', [WebPostController::class, 'showOne'])->name('showOnePost');
+Route::get('/posts/create', [WebPostController::class, 'create'])->middleware(['auth'])->name('create_post');
+Route::post('/posts/create', [WebPostController::class, 'createSubmit'])->middleware(['auth'])->name('create_post');
 
-Route::get('/webposts/{id}/edit', [WebPostController::class, 'editPost'])->middleware(['auth'])->name('postEdit');
-Route::get('/webposts/{id}/delete', [WebPostController::class, 'deletePost'])->middleware(['auth'])->name('postDelete');
-
-Route::post('/webposts/{id}/edit', [WebPostController::class, 'editPostSubmit'])->middleware(['auth'])->name('postEditSubmit');
-Route::post('/webposts/addNew/success', [WebPostController::class, 'createPostSubmit'])->middleware(['auth'])->name('addNewPost');
+Route::get('/posts/{post}/edit', [WebPostController::class, 'edit'])->middleware(['auth'])->name('edit_post');
+Route::post('/posts/{post}/edit', [WebPostController::class, 'editSubmit'])->middleware(['auth'])->name('edit_post');
 
 
-Route::get('/users', function (){
+Route::get('/posts/{post}', [WebPostController::class, 'showOne'])->name('showOne');
+
+Route::get('/posts/{post}/delete', [WebPostController::class, 'delete'])->middleware(['auth'])->name('delete');
+
+
+Route::get('/users', function () {
     return dd(\App\Models\User::all());
 })->name('showAllUsers');
 
 
-
-
-
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

@@ -4,8 +4,8 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
+
     /**
      * Run the migrations.
      *
@@ -13,8 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->softDeletes();
+        Schema::create('post_tags', function (Blueprint $table) {
+            $table->unsignedBigInteger('tag_id');
+            $table->morphs('taggable');
+            $table->timestamps();
         });
     }
 
@@ -25,8 +27,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropSoftDeletes();;
-        });
+        Schema::dropIfExists('post_tags');
     }
 };

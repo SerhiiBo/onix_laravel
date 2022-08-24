@@ -1,4 +1,4 @@
-@extends('webpost')
+@extends('layouts.app')
 
 @section('content')
     <main>
@@ -24,18 +24,20 @@
                                 </svg>
                                 <div class="card-body">
                                     <p class="card-text">Title:
-                                        <a href="/webposts/{{ $post->id }}">{{ $post->title }}</a>
+                                        <a href="/posts/{{ $post->id }}">{{ $post->title }}</a>
                                     </p>
                                     <div class="d-flex justify-content-between align-items-center">
                                         <div class="btn-group">
-                                            <a href="{{route('showOnePost', $post->id)}}">
+                                            <a href="{{route('showOne', $post->id)}}">
                                                 <button type="button" class="btn btn-sm btn-outline-secondary">View
                                                 </button>
                                             </a>
                                             @if(auth()->user())
                                                 @if(auth()->user()->id == $post->user_id)
-                                                    <a href="{{route('postEdit', $post->id)}}">
-                                                        <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+                                                    <a href="{{route('edit_post', $post->id)}}">
+                                                        <button type="button" class="btn btn-sm btn-outline-secondary">
+                                                            Edit
+                                                        </button>
                                                     </a>
                                                 @endif
                                             @endif
