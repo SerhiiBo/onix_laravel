@@ -44,6 +44,32 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    public function scopeEmail($query, $email)
+    {
+        return $query->where('email', 'ILIKE', "$email%");
+    }
+
+    public function scopeBetweenDates($query, $startDate, $endDate)
+    {
+        if ($startDate && $endDate) {
+            return $query->whereBetween('created_at', [$startDate, $endDate]);
+        }
+    }
+
+    public function scopeSortByTop($query, $sortBy)
+    {
+        if ($sortBy === 'top') {
+            return $query->withCount('posts')->orderBy('posts_count', 'DESC');
+        }
+    }
+
+    public function scopeTrueAuthor($query, $authors)
+    {
+        if ($authors === 'true') {
+            return $query->withCount('posts')->has('posts', '>', 0);
+        }
+    }
+
     public function posts(): HasMany
     {
         return $this->hasMany(Post::class);

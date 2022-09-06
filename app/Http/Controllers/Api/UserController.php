@@ -12,28 +12,14 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class UserController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
-     */
+
     public function index(Request $request)
     {
-        $query = User::query();
-        if ($request->keywords) {
-            $query->where('email', 'ILIKE', "$request->keywords%");
-        }
-        if ($request->startDate and $request->endDate) {
-            $query->whereBetween('created_at', [$request->startDate, $request->endDate]);
-        }
-        if ($request->sortBy === 'top') {
-            $query->withCount('posts')->orderBy('posts_count', 'DESC');
-        }
-        if ($request->authors == 'true') {
-            $query->withCount('posts')->has('posts', '>', 0);
-        }
-        $users = $query->paginate(5)->withQueryString();
-        return UserResource::collection($users);
+        $query = User::email($request->email)
+            ->betweenDates($request->startDate, $request->endDate)
+            ->sortByTop($request->sortBy)
+            ->trueAuthor($request->authors);
+        return UserResource::collection($query->paginate(5));
     }
 
     /**

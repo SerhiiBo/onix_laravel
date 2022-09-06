@@ -7,6 +7,7 @@ use App\Http\Requests\UpdatePostRequest;
 use App\Http\Resources\PostResource;
 use App\Models\Tag;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Models\Post;
@@ -15,20 +16,13 @@ use App\Models\User;
 
 class PostController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
-     */
+
     public function index(Request $request)
     {
-        $query = Post::query();
-        if ($request->keywords) {
-            $searchWords = "%$request->keywords%";
-            $query->where('title', 'ILIKE', $searchWords)
-                ->orWhere('text', 'ILIKE', $searchWords);
-        }
-        return PostResource::collection($query->paginate(5)->withQueryString());
+        $query = Post::title($request->get('title'))
+            ->body($request->get('body'))
+            ->tags($request->get('tags'));
+        return PostResource::collection($query->paginate(5));
     }
 
     /**
