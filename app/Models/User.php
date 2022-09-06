@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -12,7 +12,6 @@ use \Illuminate\Database\Eloquent\Relations\HasMany;
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
-
 
     /**
      * The attributes that are mass assignable.
@@ -44,26 +43,26 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function scopeEmail($query, $email)
+    public function scopeEmail(Builder $query, $email)
     {
         return $query->where('email', 'ILIKE', "$email%");
     }
 
-    public function scopeBetweenDates($query, $startDate, $endDate)
+    public function scopeBetweenDates(Builder $query, $startDate, $endDate)
     {
         if ($startDate && $endDate) {
             return $query->whereBetween('created_at', [$startDate, $endDate]);
         }
     }
 
-    public function scopeSortByTop($query, $sortBy)
+    public function scopeSortByTop(Builder $query, $sortBy)
     {
         if ($sortBy === 'top') {
             return $query->withCount('posts')->orderBy('posts_count', 'DESC');
         }
     }
 
-    public function scopeTrueAuthor($query, $authors)
+    public function scopeTrueAuthor(Builder $query, $authors)
     {
         if ($authors === 'true') {
             return $query->withCount('posts')->has('posts', '>', 0);

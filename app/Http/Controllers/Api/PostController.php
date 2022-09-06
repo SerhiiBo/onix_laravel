@@ -22,7 +22,7 @@ class PostController extends Controller
         $query = Post::title($request->get('title'))
             ->body($request->get('body'))
             ->tags($request->get('tags'));
-        return PostResource::collection($query->paginate(5));
+        return PostResource::collection($query->paginate(10));
     }
 
     /**

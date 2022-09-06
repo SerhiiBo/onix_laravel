@@ -19,7 +19,7 @@ class UserController extends Controller
             ->betweenDates($request->startDate, $request->endDate)
             ->sortByTop($request->sortBy)
             ->trueAuthor($request->authors);
-        return UserResource::collection($query->paginate(5));
+        return UserResource::collection($query->paginate(10));
     }
 
     /**
