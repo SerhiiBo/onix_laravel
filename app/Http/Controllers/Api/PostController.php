@@ -5,21 +5,31 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UpdatePostRequest;
 use App\Http\Resources\PostResource;
+use App\Models\Scopes\AuthorScope;
 use App\Models\Tag;
-
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Models\Post;
 
-use App\Models\User;
-
 class PostController extends Controller
 {
-
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     */
     public function index(Request $request)
     {
         $query = Post::title($request->get('title'))
+            ->body($request->get('body'))
+            ->tags($request->get('tags'));
+        return PostResource::collection($query->paginate(10));
+    }
+
+    public function search(Request $request)
+    {
+        $query = Post::withoutGlobalScope(AuthorScope::class)
+            ->title($request->get('title'))
             ->body($request->get('body'))
             ->tags($request->get('tags'));
         return PostResource::collection($query->paginate(10));

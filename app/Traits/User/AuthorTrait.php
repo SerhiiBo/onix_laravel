@@ -4,16 +4,13 @@ namespace App\Traits\User;
 
 use App\Models\Post;
 use App\Models\Scopes\AuthorScope;
+use Illuminate\Support\Facades\Route;
 
 trait AuthorTrait
 {
-    protected static function booted()
+    protected static function boot()
     {
-        if (request()->path() == 'api/post/my') {
-            static::addGlobalScope(new AuthorScope());
-        }
-        if (request()->path() == 'api/post/search') {
-            return Post::withoutGlobalScopes();
-        }
+        parent::boot();
+        static::addGlobalScope(new AuthorScope());
     }
 }
