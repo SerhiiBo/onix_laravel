@@ -16,9 +16,11 @@ class PostSeeder extends Seeder
      */
     public function run()
     {
-        $user = User::factory()->create();
-        Post::factory(7)->create([
-            "user_id" => $user->id,
-        ]);
+        for ($i = 1; $i < 2; $i++) {
+            $user = User::factory()->create();
+            Post::factory(rand(1, 5))->create([
+                "user_id" => $user->id,
+            ]);
+        }
     }
 }
