@@ -21,7 +21,7 @@ class User extends Authenticatable
         parent::boot();
 
         static::creating(function ($user) {
-            $user->full_name = $user->first_name.' '.$user->last_name;
+            $user->full_name = "$user->first_name $user->last_name";
         });
     }
 

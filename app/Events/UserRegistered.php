@@ -2,7 +2,6 @@
 
 namespace App\Events;
 
-use App\Http\Requests\UpdateUserRequest;
 use App\Models\User;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
@@ -12,7 +11,7 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class UserCreating
+class UserRegistered
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -21,7 +20,7 @@ class UserCreating
      *
      * @return void
      */
-    public function __construct(public UpdateUserRequest $request)
+    public function __construct(public User $user)
     {
     }
 }

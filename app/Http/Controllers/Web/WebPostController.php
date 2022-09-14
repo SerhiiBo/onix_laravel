@@ -11,7 +11,7 @@ class WebPostController extends Controller
 {
     public function showAll()
     {
-        $posts = Post::orderBy('date', 'DESC');
+        $posts = Post::orderBy('created_at', 'DESC');
         return view('posts/all', ['posts' => $posts->paginate(6)]);
     }
 

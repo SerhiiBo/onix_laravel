@@ -36,11 +36,9 @@ class Post extends Model
 
     public function scopeTags($query, $tags)
     {
-        if ($tags) {
-            return $query->whereHas('tags', function ($query) use ($tags) {
-                $query->whereName($tags);
-            })->with('tags');
-        }
+        return $query->whereHas('tags', function ($query) use ($tags) {
+            $query->whereName($tags);
+        })->with('tags');
     }
 
     public function user(): BelongsTo
