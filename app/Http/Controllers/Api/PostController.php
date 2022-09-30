@@ -43,15 +43,11 @@ class PostController extends Controller
      */
     public function store(UpdatePostRequest $request): PostResource
     {
-        $createdPost = Post::create($request->validated());
+        $post = Post::create($request->validated());
         if ($request->has('tags')) {
-            $attachableTags = [];
-            foreach (explode(",", $request->tags) as $tag) {
-                $attachableTags[] = Tag::firstOrCreate(['name' => $tag])->id;
-            }
-            $createdPost->tags()->sync($attachableTags);
+            $post->attacheTags($request, $post);
         }
-        return new PostResource($createdPost);
+        return new PostResource($post);
     }
 
     /**
@@ -76,11 +72,7 @@ class PostController extends Controller
     {
         $post->update($request->validated());
         if ($request->has('tags')) {
-            $updatableTags = [];
-            foreach (explode(",", $request->tags) as $tag) {
-                $updatableTags[] = Tag::firstOrCreate(['name' => $tag])->id;
-            }
-            $post->tags()->sync($updatableTags);
+            $post->attacheTags($request, $post);
         }
         return new PostResource($post);
     }

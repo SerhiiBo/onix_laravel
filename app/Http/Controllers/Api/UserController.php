@@ -22,7 +22,7 @@ class UserController extends Controller
     {
         $query = User::email($request->email)
             ->betweenDates($request->startDate, $request->endDate)
-            ->sortByTop($request->sortBy)
+            ->when($request->sortBy == 'top')->sortByTop()
             ->trueAuthor($request->authors);
         return UserResource::collection($query->paginate(10));
     }

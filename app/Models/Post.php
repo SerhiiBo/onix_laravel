@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Http\Requests\UpdatePostRequest;
 use App\Traits\User\AuthorTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -39,6 +40,15 @@ class Post extends Model
         return $query->whereHas('tags', function ($query) use ($tags) {
             $query->whereName($tags);
         })->with('tags');
+    }
+
+    public function attacheTags($request, $post)
+    {
+        $attachableTags = [];
+        foreach (explode(",", $request->tags) as $tag) {
+            $attachableTags[] = Tag::firstOrCreate(['name' => $tag])->id;
+        }
+        $post->tags()->sync($attachableTags);
     }
 
     public function user(): BelongsTo

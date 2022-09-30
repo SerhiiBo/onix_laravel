@@ -70,11 +70,9 @@ class User extends Authenticatable
         }
     }
 
-    public function scopeSortByTop(Builder $query, $sortBy)
+    public function scopeSortByTop(Builder $query)
     {
-        if ($sortBy === 'top') {
             return $query->withCount('posts')->orderBy('posts_count', 'DESC');
-        }
     }
 
     public function scopeTrueAuthor(Builder $query, $authors)
